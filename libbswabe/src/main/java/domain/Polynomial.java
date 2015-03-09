@@ -1,7 +1,7 @@
 package domain;
 
 
-import sun.plugin.dom.core.Element;
+import it.unisa.dia.gas.jpbc.Element;
 
 /**
  * @see bswabe_polynomial_t
