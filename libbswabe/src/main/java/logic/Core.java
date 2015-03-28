@@ -4,6 +4,7 @@ import domain.CphT;
 import domain.MskT;
 import domain.PubT;
 import domain.PrvT;
+import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.plaf.jpbc.wrapper.jna.PBCElementType;
 
 import java.lang.reflect.GenericArrayType;
@@ -26,7 +27,7 @@ public interface Core {
      * argument should be a null terminated array of pointers to strings,
      * one for each attribute.
      */
-    public PrvT[] bswabe_keygen(PubT pub);
+    PrvT bswabe_keygen(PubT pub, MskT msk, String[] attributes);
 
     /**
      *
@@ -54,7 +55,7 @@ public interface Core {
      * Returns null if an error occured, in which case a description can be
      * retrieved by calling bswabe_error().
      */
-    public CphT[] bswabe_enc(PubT pub, PBCElementType m, String policy);
+    public CphT bswabe_enc(PubT pub, Element m, String policy);
 
 
     /**

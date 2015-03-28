@@ -55,11 +55,11 @@ public class PubT {
         this.gp = gp;
     }
 
-    public Element getgHatAlpha() {
+    public Element getGHatAlpha() {
         return gHatAlpha;
     }
 
-    public void setgHatAlpha(Element gHatAlpha) {
+    public void setGHatAlpha(Element gHatAlpha) {
         this.gHatAlpha = gHatAlpha;
     }
 }

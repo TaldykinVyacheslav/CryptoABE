@@ -1,5 +1,6 @@
 package domain;
 
+import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
 import java.util.List;
 
@@ -9,14 +10,14 @@ import java.util.List;
  @see bswabe_prv_s
 */
 public class PrvT {
-	private Pairing d;		/* G_2 */
+	private Element d;		/* G_2 */
     List comps;			/* bswabe_prv_comp_t's */
 
-	public Pairing getD() {
+	public Element getD() {
 		return d;
 	}
 
-	public void setD(Pairing d) {
+	public void setD(Element d) {
 		this.d = d;
 	}
 

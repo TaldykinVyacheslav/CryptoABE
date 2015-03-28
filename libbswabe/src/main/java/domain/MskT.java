@@ -18,11 +18,11 @@ public class MskT {
         this.beta = beta;
     }
 
-    public Element getgAlpha() {
+    public Element getGAlpha() {
         return gAlpha;
     }
 
-    public void setgAlpha(Element gAlpha) {
+    public void setGAlpha(Element gAlpha) {
         this.gAlpha = gAlpha;
     }
 }

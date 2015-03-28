@@ -1,6 +1,5 @@
 package domain;
 
-import com.sun.jna.Pointer;
 import it.unisa.dia.gas.jpbc.Element;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class Policy {
 
 	/* only used during decryption */
 	private int satisfiable;
-	private int min_leaves;
+	private int minLeaves;
 	private int attri;
 	private List satl;
 
@@ -80,12 +79,12 @@ public class Policy {
 		this.satisfiable = satisfiable;
 	}
 
-	public int getMin_leaves() {
-		return min_leaves;
+	public int getMinLeaves() {
+		return minLeaves;
 	}
 
-	public void setMin_leaves(int min_leaves) {
-		this.min_leaves = min_leaves;
+	public void setMinLeaves(int minLeaves) {
+		this.minLeaves = minLeaves;
 	}
 
 	public int getAttri() {
