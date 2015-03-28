@@ -53,7 +53,7 @@ public class Dec {
             }
             else if( argv[i].equals("-v") || argv[i].equals("--version") )
             {
-                printf(CPABE_VERSION, "-dec");
+                System.out.println(CPABE_VERSION + "-dec");
                 System.exit(0);
             }
             else if( argv[i].equals("-k") || argv[i].equals("--keep-input-file") )
