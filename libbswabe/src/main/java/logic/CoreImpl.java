@@ -506,24 +506,160 @@ public class CoreImpl implements Core {
             c.setZ(pub.getP().getG1().newRandomElement());
             c.setZp(pub.getP().getG2().newRandomElement());
             c.getZ().setToOne();
-            e;e
+            c.getZp().setToOne();
         }
 
-        element_init_G1(s, pub->p);
+        s = p.getC().powZn(exp); /* num_exps++; */
+        c.setZ(c.getZ().mul(s)); /* num_muls++; */
 
-        element_pow_zn(s, p->c, exp); /* num_exps++; */
-        element_mul(c->z, c->z, s); /* num_muls++; */
+        s = p.getCp().powZn(exp); /* num_exps++; */
+        c.setZp(c.getZp().mul(s)); /* num_muls++; */
+    }
 
-        element_pow_zn(s, p->cp, exp); /* num_exps++; */
-        element_mul(c->zp, c->zp, s); /* num_muls++; */
+    void dec_node_merge( Element exp, Policy p, PrvT prv, PubT pub ) {
+        assert p.getSatisfiable() != 0;
+        if( p.getChildren().size() == 0 )
+            dec_leaf_merge(exp, p, prv, pub);
+        else
+            dec_internal_merge(exp, p, prv, pub);
+    }
 
-        element_clear(s);
+    void dec_internal_merge( Element exp, Policy p, PrvT prv, PubT pub ) {
+        int i;
+        Element t;
+        Element expnew;
+
+        t = pub.getP().getZr().newRandomElement();
+        expnew = pub.getP().getZr().newRandomElement();
+
+        for( i = 0; i < p.getSatl().size(); i++ ) {
+            t = lagrange_coef(t, p.getSatl(), (int)p.getSatl().get(i));
+            expnew = exp.mul(t); /* num_muls++; */
+            dec_node_merge(expnew, p.getChildren().get((int)p.getSatl().get(i) - 1), prv, pub);
+        }
+    }
+
+    Element dec_merge( Element r, Policy p, PrvT prv, PubT pub ) {
+        int i;
+        Element one;
+        Element s;
+
+	/* first mark all attributes as unused */
+        for( i = 0; i < prv.getComps().size(); i++ )
+            ((PrvComp)prv.getComps().get(i)).setUsed(0);
+
+	/* now fill in the z's and zp's */
+        one = pub.getP().getZr().newRandomElement();
+        one.setToOne();
+        dec_node_merge(one, p, prv, pub);
+
+	/* now do all the pairings and multiply everything together */
+        r.setToOne();
+        s = pub.getP().getGT().newRandomElement();
+        for( i = 0; i < prv.getComps().size(); i++ )
+            if( ((PrvComp)prv.getComps().get(i)).getUsed() != 0 ) {
+                PrvComp c = (PrvComp)prv.getComps().get(i);
+
+                s = pub.getP().pairing(c.getZ(), c.getD()); /* num_pairings++; */
+                r = r.mul(s); /* num_muls++; */
+
+                s = pub.getP().pairing(c.getZp(), c.getDp()); /* num_pairings++; */
+                s = s.invert();
+                r = r.mul(s); /* num_muls++; */
+            }
+        return r;
+    }
+
+    Element dec_leaf_flatten( Element r, Element exp,
+                      Policy p, PrvT prv, PubT pub ) {
+        PrvComp c;
+        Element s;
+        Element t;
+
+        c = (PrvComp)prv.getComps().get(p.getAttri());
+
+        /*s = pub.getP().getGT().newRandomElement();
+        t = pub.getP().getGT().newRandomElement();*/
+
+        s = pub.getP().pairing(p.getC(), c.getD()); /* num_pairings++; */
+        t = pub.getP().pairing(p.getCp(), c.getDp()); /* num_pairings++; */
+        t = t.invert();
+        s = s.mul(t); /* num_muls++; */
+        s = s.powZn(exp); /* num_exps++; */
+
+        r = r.mul(s); /* num_muls++; */
+        return r;
+    }
+
+    Element dec_internal_flatten( Element r, Element exp, Policy p, PrvT prv, PubT pub ) {
+        int i;
+        Element t;
+        Element expnew;
+
+        t = pub.getP().getZr().newRandomElement();
+        expnew = pub.getP().getZr().newRandomElement();
+
+        for( i = 0; i < p.getSatl().size(); i++ ) {
+            t = lagrange_coef(t, p.getSatl(), (int)p.getSatl().get(i));
+            expnew = exp.mul(t); /* num_muls++; */
+            r = dec_node_flatten(r, expnew, p.getChildren().get((int)p.getSatl().get(i) - 1), prv, pub);
+        }
+
+        return r;
+    }
+
+    Element dec_node_flatten( Element r, Element exp, Policy p, PrvT prv, PubT pub ) {
+        assert p.getSatisfiable() != 0;
+        if( p.getChildren().size() == 0 )
+            r = dec_leaf_flatten(r, exp, p, prv, pub);
+        else
+            r = dec_internal_flatten(r, exp, p, prv, pub);
+
+        return r;
+    }
+
+    Element dec_flatten( Element r, Policy p, PrvT prv, PubT pub ) {
+        Element one;
+
+        one = pub.getP().getZr().newOneElement();
+        r.setToOne();
+        r = dec_node_flatten(r, one, p, prv, pub);
+
+        return r;
     }
 
     @Override
-    public int bswabe_dec(PubT pub, PrvT prvT, CphT cph, PBCElementType m) {
+    public Element bswabe_dec(PubT pub, PrvT prv, CphT cph, Element m) {
 
-        return 0;
+        Element t;
+
+        m = pub.getP().getGT().newRandomElement();
+        t = pub.getP().getGT().newRandomElement();
+
+        check_sat(cph.getP(), prv);
+        if( cph.getP().getSatisfiable() != 0 ) {
+            return null;
+        }
+
+/* 	if( no_opt_sat ) */
+/* 		pick_sat_naive(cph->p, prv); */
+/* 	else */
+        pick_sat_min_leaves(cph.getP(), prv);
+
+/* 	if( dec_strategy == DEC_NAIVE ) */
+/* 		dec_naive(t, cph->p, prv, pub); */
+/* 	else if( dec_strategy == DEC_FLATTEN ) */
+        dec_flatten(t, cph.getP(), prv, pub);
+/* 	else */
+/* 		dec_merge(t, cph->p, prv, pub); */
+
+        m = cph.getCs().mul(t); /* num_muls++; */
+
+        t = pub.getP().pairing(cph.getC(), prv.getD()); /* num_pairings++; */
+        t = t.invert();
+        m = m.mul(t); /* num_muls++; */
+
+        return m;
     }
 
     @Override

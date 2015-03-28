@@ -5,7 +5,6 @@ import domain.MskT;
 import domain.PubT;
 import domain.PrvT;
 import it.unisa.dia.gas.jpbc.Element;
-import it.unisa.dia.gas.plaf.jpbc.wrapper.jna.PBCElementType;
 
 import java.lang.reflect.GenericArrayType;
 import java.util.List;
@@ -66,7 +65,7 @@ public interface Core {
      * Returns true if decryption succeeded, false if this key does not
      * satisfy the policy of the ciphertext (in which case m is unaltered).
      */
-    public int bswabe_dec(PubT pub, PrvT prvT, CphT cph, PBCElementType m);
+    public Element bswabe_dec(PubT pub, PrvT prvT, CphT cph, Element m);
 
     /**
      * Exactly what it seems.
