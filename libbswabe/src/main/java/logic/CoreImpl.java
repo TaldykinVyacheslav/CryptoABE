@@ -3,9 +3,7 @@ package logic;
 import domain.*;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
-import it.unisa.dia.gas.plaf.jpbc.wrapper.jna.PBCElementType;
 
-import java.lang.reflect.GenericArrayType;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -660,65 +658,5 @@ public class CoreImpl implements Core {
         m = m.mul(t); /* num_muls++; */
 
         return m;
-    }
-
-    @Override
-    public GenericArrayType bswabe_pub_serialize(PubT pub) {
-        return null;
-    }
-
-    @Override
-    public GenericArrayType bswabe_msk_serialize(MskT msk) {
-        return null;
-    }
-
-    @Override
-    public GenericArrayType bswabe_prv_serialize(PrvT prv) {
-        return null;
-    }
-
-    @Override
-    public GenericArrayType bswabe_cph_serialize(CphT cph) {
-        return null;
-    }
-
-    @Override
-    public PubT bswabe_pub_unserialize(GenericArrayType b, int free) {
-        return null;
-    }
-
-    @Override
-    public MskT bswabe_msk_unserialize(PubT pub, GenericArrayType b, int free) {
-        return null;
-    }
-
-    @Override
-    public PrvT bswabe_prv_unserialize(PubT pub, GenericArrayType b, int free) {
-        return null;
-    }
-
-    @Override
-    public CphT bswabe_cph_unserialize(PubT pub, GenericArrayType b, int free) {
-        return null;
-    }
-
-    @Override
-    public void bswabe_pub_free(PubT pub) {
-
-    }
-
-    @Override
-    public void bswabe_msk_free(MskT msk) {
-
-    }
-
-    @Override
-    public void bswabe_prv_free(PrvT prv) {
-
-    }
-
-    @Override
-    public void bswabe_cph_free(CphT cph) {
-
     }
 }
