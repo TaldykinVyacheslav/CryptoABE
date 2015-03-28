@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/CryptoABE.iml" filepath="$PROJECT_DIR$/.idea/CryptoABE.iml" />
       <module fileurl="file://$PROJECT_DIR$/highlevelFunctions/highlevelFunctions.iml" filepath="$PROJECT_DIR$/highlevelFunctions/highlevelFunctions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libbswabe/libbswabe.iml" filepath="$PROJECT_DIR$/libbswabe/libbswabe.iml" />
     </modules>
   </component>
 </project>

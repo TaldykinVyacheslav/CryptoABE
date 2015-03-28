@@ -32,6 +32,13 @@
     <entry_points version="2.0" />
   </component>
   <component name="IdProvider" IDEtalkID="7D91CC19CACB9BF3880AF5B01335F758" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/libbswabe/pom.xml" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
