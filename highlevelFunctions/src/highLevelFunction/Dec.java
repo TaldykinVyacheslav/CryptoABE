@@ -5,7 +5,6 @@ package highLevelFunction;
         import domain.PrvT;
         import domain.PubT;
         import it.unisa.dia.gas.jpbc.Element;
-        import it.unisa.dia.gas.plaf.jpbc.wrapper.jna.PBCElementType;
         import logic.CoreImpl;
 
         import java.util.ArrayList;
@@ -145,7 +144,7 @@ public class Dec {
         read_cpabe_file(in_file, cph_buf, file_len, aes_buf);
 
         cph = coreImpl.bswabe_cph_unserialize(pub, cph_buf, 1);
-        if( coreImpl.bswabe_dec(pub, prv, cph, m) == 0)
+        if( coreImpl.bswabe_dec(pub, prv, cph) == 0)
             die("%s", coreImpl.bswabe_error());
         coreImpl.bswabe_cph_free(cph);
 

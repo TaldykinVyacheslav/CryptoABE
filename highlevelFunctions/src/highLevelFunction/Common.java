@@ -1,10 +1,15 @@
 package highLevelFunction;
 
+import com.sun.deploy.util.ArrayUtil;
 import it.unisa.dia.gas.jpbc.Element;
+import org.apache.commons.lang.ArrayUtils;
 
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -15,6 +20,8 @@ public class Common {
 
     //AES_KEY -> SecretKey
     //
+    public static Cipher cipher;
+
     static {
         try {
             cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -23,19 +30,16 @@ public class Common {
         }
     }
 
-    public static Cipher cipher;
-
-    static byte[] init_aes(Element k, int enc, SecretKey key, byte[] iv) throws InvalidKeyException {
-        int key_len = k.getLengthInBytes() < 17 ? 17 : k.getLengthInBytes();
+    static SecretKey init_aes(Element k, int enc) throws InvalidKeyException {
         byte[] key_buf = k.toBytes();
+        SecretKey key = new SecretKeySpec(key_buf, 0, key_buf.length, "AES");
 
         if (enc != 0) {
-            cipher.init(Cipher.ENCRYPT_MODE, );
-        }
-        else {
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+        } else {
             cipher.init(Cipher.DECRYPT_MODE, key);
         }
-        return cipher.getIV();
+        return key;
     }
 
     static List<Byte> array_prepend(byte[] len, List<Byte> pt) {
@@ -46,14 +50,18 @@ public class Common {
         return pt;
     }
 
-    static List<Byte> aes_128_cbc_encrypt(List<Byte> pt, Element k) {
-        SecretKey key = new SecretKey();
-        byte[] iv = new byte[16];
-        List<Byte> ct;
+    static List<Byte> fromPrimitiveArrayToList(byte[] arr) {
+        return Arrays.asList(ArrayUtils.toObject(arr));
+    }
+
+    static byte[] fromListToPrimitiveArray(List<Byte> list) {
+        return ArrayUtils.toPrimitive(list.toArray(new Byte[list.size()]));
+    }
+
+    static List<Byte> aes_128_cbc_encrypt(List<Byte> pt, Element k) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        byte[] ct;
         byte[] len = new byte[4];
         byte zero;
-
-        init_aes(k, 1, key, iv);
 
         len[0] = (byte) ((pt.size() & 0xff000000) >> 24);
         len[1] = (byte) ((pt.size() & 0xff0000) >> 16);
@@ -67,25 +75,18 @@ public class Common {
         while (pt.size() % 16 != 0)
             pt.add(zero);
 
-        ct = new ArrayList<>(pt.size());
+        ct = cipher.doFinal(fromListToPrimitiveArray(pt));
 
-        AES_cbc_encrypt(pt, ct, pt.size(), key, iv, AES_ENCRYPT);
-
-        return ct;
+        return fromPrimitiveArrayToList(ct);
     }
 
-    static List<Byte> aes_128_cbc_decrypt( List<Byte> ct, Element k )
-    {
-        SecretKey[] key = new SecretKey[]{};
-        Byte[] iv = new Byte[16];
+    static List<Byte> aes_128_cbc_decrypt( List<Byte> ct, Element k ) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         List<Byte> pt;
         int len;
 
-        init_aes(k, 0, key, iv);
+        init_aes(k, 0);
 
-        pt = new ArrayList<>(ct.size());
-
-        AES_cbc_encrypt(ct, pt, ct.size(), key, iv, AES_DECRYPT);
+        pt = fromPrimitiveArrayToList(cipher.doFinal(fromListToPrimitiveArray(ct)));
 
   /* TODO make less crufty */
 
@@ -106,5 +107,105 @@ public class Common {
         }
 
         return pt;
+    }
+
+    FileInputStream fopen_read_or_die( String fileName ) throws FileNotFoundException {
+        return new FileInputStream(fileName);
+    }
+    
+    FileOutputStream fopen_write_or_die( String fileName ) throws FileNotFoundException {
+        return new FileOutputStream(fileName);
+    }
+
+    byte[] suck_file( String fileName ) throws IOException {
+        FileInputStream f;
+        Path path = Paths.get(fileName);
+        byte[] a;
+
+        f = fopen_read_or_die(fileName);
+        a = Files.readAllBytes(path);
+        f.close();
+
+        return a;
+    }
+
+    String suck_file_str( String file ) throws IOException {
+        byte[] a;
+        String s;
+        byte zero;
+
+        a = suck_file(file);
+        a = Arrays.copyOf(a, a.length + 1);
+        a[a.length] = 0;
+        s = new String(a);
+
+        return s;
+    }
+
+    void spit_file( String fileName, List<Byte> b, int free ) throws IOException {
+        FileOutputStream f;
+
+        f = fopen_write_or_die(fileName);
+        f.write(fromListToPrimitiveArray(b));
+        f.close();
+
+        if( free != 0 )
+            b.clear();
+    }
+
+    Object[] read_cpabe_file( String fileName, byte[] cph_buf, long file_len, byte[] aes_buf ) throws IOException {
+        FileInputStream f;
+        int i;
+        int len;
+
+        f = fopen_read_or_die(fileName);
+
+	    /* read real file len as 32-bit big endian int */
+        file_len = 0;
+        for( i = 3; i >= 0; i-- )
+            file_len |= f.read()<<(i*8);
+
+	    /* read aes buf */
+        len = 0;
+        for( i = 3; i >= 0; i-- )
+            len |= f.read()<<(i*8);
+        aes_buf = new byte[len];
+        f.read(aes_buf);
+
+	    /* read cph buf */
+        len = 0;
+        for( i = 3; i >= 0; i-- )
+            len |= f.read()<<(i*8);
+        cph_buf = new byte[len];
+        f.read(cph_buf);
+
+        f.close();
+
+        return new Object[] {cph_buf, file_len, aes_buf};
+    }
+
+    void write_cpabe_file( String fileName, byte[] cph_buf, long file_len, byte[] aes_buf ) throws IOException {
+        FileOutputStream f;
+        DataOutputStream dos;
+        int i;
+
+        f = fopen_write_or_die(fileName);
+        dos = new DataOutputStream(f);
+
+	    /* write real file len as 32-bit big endian int */
+        for( i = 3; i >= 0; i-- )
+            dos.writeLong((file_len & 0xff << (i * 8)) >> (i * 8));
+
+	    /* write aes_buf */
+        for( i = 3; i >= 0; i-- )
+            dos.writeLong((aes_buf.length & 0xff << (i * 8)) >> (i * 8));
+        dos.write(aes_buf);
+
+	    /* write cph_buf */
+        for( i = 3; i >= 0; i-- )
+            dos.writeLong((cph_buf.length & 0xff << (i * 8)) >> (i * 8));
+        dos.write(cph_buf);
+
+        dos.close();
     }
 }

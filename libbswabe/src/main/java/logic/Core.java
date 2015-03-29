@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * methods in application
- * @see core.c
+ * @see 'core.c'
  */
 public interface Core {
     /**
@@ -66,7 +66,7 @@ public interface Core {
      * Returns true if decryption succeeded, false if this key does not
      * satisfy the policy of the ciphertext (in which case m is unaltered).
      */
-    public Element bswabe_dec(PubT pub, PrvT prvT, CphT cph, Element m);
+    public Element bswabe_dec(PubT pub, PrvT prvT, CphT cph);
 
 
     /**

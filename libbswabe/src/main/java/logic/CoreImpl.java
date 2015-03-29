@@ -627,8 +627,8 @@ public class CoreImpl implements Core {
     }
 
     @Override
-    public Element bswabe_dec(PubT pub, PrvT prv, CphT cph, Element m) {
-
+    public Element bswabe_dec(PubT pub, PrvT prv, CphT cph) {
+        Element m;
         Element t;
 
         m = pub.getP().getGT().newRandomElement();
