@@ -28,7 +28,7 @@ public class CoreImpl implements Core {
     private char[] lastError = new char[256];
 
     @Override
-    public char[] bswabe_error() {
+    public char[] error() {
         return lastError;
     }
 
@@ -53,7 +53,7 @@ public class CoreImpl implements Core {
     }
     
     @Override
-    public void bswabe_setup(PubT pub, MskT msk) {
+    public void setup(PubT pub, MskT msk) {
         Element alpha;
 
         /* initialize*/
@@ -76,7 +76,7 @@ public class CoreImpl implements Core {
     }
 
     @Override
-    public PrvT bswabe_keygen(PubT pub, MskT msk, String[] attributes) {
+    public PrvT keygen(PubT pub, MskT msk, String[] attributes) {
         PrvT prv;
         Element gR;
         Element r;
@@ -284,9 +284,10 @@ public class CoreImpl implements Core {
     }
 
     @Override
-    public CphT bswabe_enc(PubT pub, Element m, String policy) {
+    public CphT enc(PubT pub, String policy) {
         CphT cph;
         Element s;
+        Element m;
 
         /* initialize */
 
@@ -627,7 +628,7 @@ public class CoreImpl implements Core {
     }
 
     @Override
-    public Element bswabe_dec(PubT pub, PrvT prv, CphT cph) {
+    public Element dec(PubT pub, PrvT prv, CphT cph) {
         Element m;
         Element t;
 

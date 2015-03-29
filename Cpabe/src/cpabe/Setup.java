@@ -1,6 +1,6 @@
-package highLevelFunctions;
+package cpabe;
 
-public class Setup {
+class Setup {
     String usage =
             "Usage: cpabe-setup [OPTION ...]\n" +
             "\n" +
@@ -61,14 +61,14 @@ public class Setup {
 
     public static void main(String[] argv )
     {
-        bswabe_pub_t* pub;
-        bswabe_msk_t* msk;
+        pub_t* pub;
+        msk_t* msk;
 
         parse_args(argc, argv);
 
-        bswabe_setup(&pub, &msk);
-        spit_file(pub_file, bswabe_pub_serialize(pub), 1);
-        spit_file(msk_file, bswabe_msk_serialize(msk), 1);
+        setup(&pub, &msk);
+        spit_file(pub_file, pub_serialize(pub), 1);
+        spit_file(msk_file, msk_serialize(msk), 1);
 
         return 0;
     }

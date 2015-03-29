@@ -1,4 +1,4 @@
-package highLevelFunctions;
+package cpabe;
 
         import aes_cbc.AES;
         import domain.CphT;
@@ -10,7 +10,7 @@ package highLevelFunctions;
         import java.util.ArrayList;
         import java.util.List;
 
-public class Dec {
+class Dec {
     private static String usage =
             "Usage: cpabe-dec [OPTION ...] PUB_KEY PRIV_KEY FILE\n" +
                     "\n" +
@@ -138,17 +138,17 @@ public class Dec {
         CoreImpl coreImpl = new CoreImpl();
         parse_args(args.length, args);
 
-        pub = coreImpl.bswabe_pub_unserialize(suck_file(pub_file), 1);
-        prv = coreImpl.bswabe_prv_unserialize(pub, suck_file(prv_file), 1);
+        pub = coreImpl.pub_unserialize(suck_file(pub_file), 1);
+        prv = coreImpl.prv_unserialize(pub, suck_file(prv_file), 1);
 
         read_cpabe_file(in_file, cph_buf, file_len, aes_buf);
 
-        cph = coreImpl.bswabe_cph_unserialize(pub, cph_buf, 1);
-        if( coreImpl.bswabe_dec(pub, prv, cph) == 0)
-            die("%s", coreImpl.bswabe_error());
-        coreImpl.bswabe_cph_free(cph);
+        cph = coreImpl.cph_unserialize(pub, cph_buf, 1);
+        if( coreImpl.dec(pub, prv, cph) == 0)
+            die("%s", coreImpl.error());
+        coreImpl.cph_free(cph);
 
-        plt = Common.aes_128_cbc_decrypt(aes_buf, m);
+        plt = CommonImpl.aes_128_cbc_decrypt(aes_buf, m);
         g_byte_array_set_size(plt, file_len);
         g_byte_array_free(aes_buf, 1);
 

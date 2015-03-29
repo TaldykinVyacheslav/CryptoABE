@@ -17,17 +17,17 @@ public interface Core {
     /**
      * Generate a public key and corresponding master secret key, and
      * assign the *pub and *msk pointers to them. The space used may be
-     * later freed by calling bswabe_pub_free(*pub) and
-     * bswabe_msk_free(*msk).
+     * later freed by calling pub_free(*pub) and
+     * msk_free(*msk).
      */
-    public void bswabe_setup(PubT pub, MskT msk);
+    public void setup(PubT pub, MskT msk);
 
     /**
      * Generate a private key with the given set of attributes. The final
      * argument should be a null terminated array of pointers to strings,
      * one for each attribute.
      */
-    PrvT bswabe_keygen(PubT pub, MskT msk, String[] attributes);
+    PrvT keygen(PubT pub, MskT msk, String[] attributes);
 
     /**
      *
@@ -53,9 +53,9 @@ public interface Core {
      * Numerical attributes and any other fancy stuff are not supported.
      *
      * Returns null if an error occured, in which case a description can be
-     * retrieved by calling bswabe_error().
+     * retrieved by calling error().
      */
-    public CphT bswabe_enc(PubT pub, Element m, String policy);
+    public CphT enc(PubT pub, String policy);
 
 
     /**
@@ -66,13 +66,13 @@ public interface Core {
      * Returns true if decryption succeeded, false if this key does not
      * satisfy the policy of the ciphertext (in which case m is unaltered).
      */
-    public Element bswabe_dec(PubT pub, PrvT prvT, CphT cph);
+    public Element dec(PubT pub, PrvT prvT, CphT cph);
 
 
     /**
      * Return a description of the last error that occured. Call this after
-     * bswabe_enc or bswabe_dec returns 0. The returned string does not
+     * enc or dec returns 0. The returned string does not
      * need to be free'd.
      */
-    public char[] bswabe_error();
+    public char[] error();
 }

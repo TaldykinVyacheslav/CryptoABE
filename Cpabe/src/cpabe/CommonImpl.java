@@ -1,4 +1,4 @@
-package highLevelFunctions;
+package cpabe;
 
 import it.unisa.dia.gas.jpbc.Element;
 import org.apache.commons.lang.ArrayUtils;
@@ -14,13 +14,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 
-public class Common {
+class CommonImpl {
 
     //AES_KEY -> SecretKey
     //
-    public static Cipher cipher;
+    public  Cipher cipher;
 
-    static {
+    {
         try {
             cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
@@ -28,7 +28,7 @@ public class Common {
         }
     }
 
-    static SecretKey init_aes(Element k, int enc) throws InvalidKeyException {
+     SecretKey init_aes(Element k, int enc) throws InvalidKeyException {
         byte[] key_buf = k.toBytes();
         SecretKey key = new SecretKeySpec(key_buf, 0, key_buf.length, "AES");
 
@@ -40,7 +40,7 @@ public class Common {
         return key;
     }
 
-    static List<Byte> array_prepend(byte[] len, List<Byte> pt) {
+     List<Byte> array_prepend(byte[] len, List<Byte> pt) {
         Byte[] c = new Byte[pt.size() + len.length];
         System.arraycopy(len, 0, c, 0, len.length);
         System.arraycopy(pt, 0, c, len.length, pt.size());
@@ -48,15 +48,15 @@ public class Common {
         return pt;
     }
 
-    static List<Byte> fromPrimitiveArrayToList(byte[] arr) {
+     List<Byte> fromPrimitiveArrayToList(byte[] arr) {
         return Arrays.asList(ArrayUtils.toObject(arr));
     }
 
-    static byte[] fromListToPrimitiveArray(List<Byte> list) {
+     byte[] fromListToPrimitiveArray(List<Byte> list) {
         return ArrayUtils.toPrimitive(list.toArray(new Byte[list.size()]));
     }
 
-    static List<Byte> aes_128_cbc_encrypt(List<Byte> pt, Element k) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+     List<Byte> aes_128_cbc_encrypt(List<Byte> pt, Element k) throws Exception {
         byte[] ct;
         byte[] len = new byte[4];
         byte zero;
@@ -78,7 +78,7 @@ public class Common {
         return fromPrimitiveArrayToList(ct);
     }
 
-    static List<Byte> aes_128_cbc_decrypt( List<Byte> ct, Element k ) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+     List<Byte> aes_128_cbc_decrypt( List<Byte> ct, Element k ) throws Exception {
         List<Byte> pt;
         int len;
 
@@ -115,7 +115,7 @@ public class Common {
         return new FileOutputStream(fileName);
     }
 
-    byte[] suck_file( String fileName ) throws IOException {
+    List<Byte> suck_file( String fileName ) throws IOException {
         FileInputStream f;
         Path path = Paths.get(fileName);
         byte[] a;
@@ -124,7 +124,7 @@ public class Common {
         a = Files.readAllBytes(path);
         f.close();
 
-        return a;
+        return fromPrimitiveArrayToList(a);
     }
 
     String suck_file_str( String file ) throws IOException {
@@ -132,7 +132,7 @@ public class Common {
         String s;
         byte zero;
 
-        a = suck_file(file);
+        a = fromListToPrimitiveArray(suck_file(file));
         a = Arrays.copyOf(a, a.length + 1);
         a[a.length] = 0;
         s = new String(a);

@@ -82,7 +82,7 @@ public class MiscImpl implements Misc {
     }
 
     @Override
-    public List<Byte> bswabe_pub_serialize(PubT pub) {
+    public List<Byte> pub_serialize(PubT pub) {
         List<Byte> b;
 
         b = new ArrayList<>();
@@ -96,7 +96,7 @@ public class MiscImpl implements Misc {
     }
 
     @Override
-    public PubT bswabe_pub_unserialize(List<Byte> b, int free) {
+    public PubT pub_unserialize(List<Byte> b, int free) {
         PubT pub;
         int offset;
         Object[] unserialize_string_result;
@@ -126,7 +126,7 @@ public class MiscImpl implements Misc {
     }
 
     @Override
-    public List<Byte> bswabe_msk_serialize(MskT msk) {
+    public List<Byte> msk_serialize(MskT msk) {
         List<Byte> b;
 
         b = new ArrayList<>();
@@ -137,7 +137,7 @@ public class MiscImpl implements Misc {
     }
 
     @Override
-    public MskT bswabe_msk_unserialize(PubT pub, List<Byte> b, int free) {
+    public MskT msk_unserialize(PubT pub, List<Byte> b, int free) {
         MskT msk;
         int offset;
 
@@ -157,7 +157,7 @@ public class MiscImpl implements Misc {
     }
 
     @Override
-    public List<Byte> bswabe_prv_serialize(PrvT prv) {
+    public List<Byte> prv_serialize(PrvT prv) {
         List<Byte> b;
         int i;
 
@@ -176,7 +176,7 @@ public class MiscImpl implements Misc {
     }
 
     @Override
-    public PrvT bswabe_prv_unserialize(PubT pub, List<Byte> b, int free) {
+    public PrvT prv_unserialize(PubT pub, List<Byte> b, int free) {
         PrvT prv;
         int i;
         int len;
@@ -274,7 +274,7 @@ public class MiscImpl implements Misc {
     }
 
     @Override
-    public List<Byte> bswabe_cph_serialize(CphT cph) {
+    public List<Byte> cph_serialize(CphT cph) {
         List<Byte> b;
 
         b = new ArrayList<>();
@@ -286,7 +286,7 @@ public class MiscImpl implements Misc {
     }
 
     @Override
-    public CphT bswabe_cph_unserialize(PubT pub, List<Byte> b, int free) {
+    public CphT cph_unserialize(PubT pub, List<Byte> b, int free) {
         CphT cph;
         int offset;
         Object[] unserialize_policy_result;

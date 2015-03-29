@@ -1,6 +1,6 @@
-package highLevelFunctions;
+package cpabe;
 
-public class Enc {
+class Enc {
 
     private static String usage =
             "Usage: cpabe-enc [OPTION ...] PUB_KEY FILE [POLICY]\n" +
@@ -84,8 +84,8 @@ public class Enc {
     int
     main( int argc, char** argv )
     {
-        bswabe_pub_t* pub;
-        bswabe_cph_t* cph;
+        pub_t* pub;
+        cph_t* cph;
         int file_len;
         GByteArray* plt;
         GByteArray* cph_buf;
@@ -94,18 +94,18 @@ public class Enc {
 
         parse_args(argc, argv);
 
-        pub = bswabe_pub_unserialize(suck_file(pub_file), 1);
+        pub = pub_unserialize(suck_file(pub_file), 1);
 
-        if( !(cph = bswabe_enc(pub, m, policy)) )
-            die("%s", bswabe_error());
+        if( !(cph = enc(pub, m, policy)) )
+            die("%s", error());
         free(policy);
 
-        cph_buf = bswabe_cph_serialize(cph);
-        bswabe_cph_free(cph);
+        cph_buf = cph_serialize(cph);
+        cph_free(cph);
 
         plt = suck_file(in_file);
         file_len = plt->len;
-        aes_buf = Common.aes_128_cbc_encrypt(plt, m);
+        aes_buf = CommonImpl.aes_128_cbc_encrypt(plt, m);
         g_byte_array_free(plt, 1);
         element_clear(m);
 

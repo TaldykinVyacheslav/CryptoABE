@@ -1,9 +1,9 @@
-package highLevelFunctions;
+package cpabe;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Keygen {
+class Keygen {
     static String usage =
             "Usage: cpabe-keygen [OPTION ...] PUB_KEY MASTER_KEY ATTR [ATTR ...]\n" +
             "\n" +
@@ -101,17 +101,17 @@ public class Keygen {
 
     public static void main( String[] argv )
     {
-        bswabe_pub_t* pub;
-        bswabe_msk_t* msk;
-        bswabe_prv_t* prv;
+        pub_t* pub;
+        msk_t* msk;
+        prv_t* prv;
 
         parse_args(argv.length, argv);
 
-        pub = bswabe_pub_unserialize(suck_file(pub_file), 1);
-        msk = bswabe_msk_unserialize(pub, suck_file(msk_file), 1);
+        pub = pub_unserialize(suck_file(pub_file), 1);
+        msk = msk_unserialize(pub, suck_file(msk_file), 1);
 
-        prv = bswabe_keygen(pub, msk, attrs);
-        spit_file(out_file, bswabe_prv_serialize(prv), 1);
+        prv = keygen(pub, msk, attrs);
+        spit_file(out_file, prv_serialize(prv), 1);
     }
 
 }
