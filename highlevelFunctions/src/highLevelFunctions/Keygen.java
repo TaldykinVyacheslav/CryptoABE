@@ -1,4 +1,4 @@
-package highLevelFunction;
+package highLevelFunctions;
 
 import java.util.ArrayList;
 import java.util.List;

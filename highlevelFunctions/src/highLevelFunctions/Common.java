@@ -1,6 +1,5 @@
-package highLevelFunction;
+package highLevelFunctions;
 
-import com.sun.deploy.util.ArrayUtil;
 import it.unisa.dia.gas.jpbc.Element;
 import org.apache.commons.lang.ArrayUtils;
 
@@ -12,7 +11,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

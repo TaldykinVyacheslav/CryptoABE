@@ -1,4 +1,4 @@
-package highLevelFunction;
+package highLevelFunctions;
 
         import aes_cbc.AES;
         import domain.CphT;

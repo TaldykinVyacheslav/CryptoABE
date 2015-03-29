@@ -1,7 +1,6 @@
-package highLevelFunction;
+package highLevelFunctions;
 
 import java.io.PrintStream;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 

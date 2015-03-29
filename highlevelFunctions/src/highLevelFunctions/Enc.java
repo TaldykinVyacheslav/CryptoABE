@@ -1,4 +1,4 @@
-package highLevelFunction;
+package highLevelFunctions;
 
 public class Enc {
 
