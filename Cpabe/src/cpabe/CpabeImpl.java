@@ -70,7 +70,7 @@ class CpabeImpl implements Cpabe {
         PrvT prv;
         int file_len = 0;
         List<Byte> aes_buf = new ArrayList<>();
-        List<Byte> plt = new ArrayList<>();
+        List<Byte> plt;
         List<Byte> cph_buf = new ArrayList<>();
         CphT cph;
         Element m = null;
