@@ -7,7 +7,7 @@ import java.util.List;
 /**
   A private key.
 
- @see bswabe_prv_s
+ @see 'bswabe_prv_s'
 */
 public class PrvT {
 	private Element d;		/* G_2 */

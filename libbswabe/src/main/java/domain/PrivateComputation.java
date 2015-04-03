@@ -2,6 +2,10 @@ package domain;
 
 import it.unisa.dia.gas.jpbc.Element;
 
+/**
+ * Private computation
+ * @see 'bswabe_prv_comp_t'
+ */
 public class PrivateComputation {
 	/* these actually get serialized */
 	String attr;

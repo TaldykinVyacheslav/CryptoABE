@@ -3,7 +3,7 @@ package domain;
 import it.unisa.dia.gas.jpbc.Element;
 
 /**
- * @see bswabe_prv_comp_t
+ * @see 'bswabe_prv_comp_t'
  */
 public class PrvComp {
     private String attr;

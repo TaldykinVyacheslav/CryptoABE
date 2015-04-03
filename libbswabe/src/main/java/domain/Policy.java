@@ -4,7 +4,7 @@ import it.unisa.dia.gas.jpbc.Element;
 import java.util.List;
 
 /**
- * @see bswabe_policy_t
+ * @see 'bswabe_policy_t'
  */
 public class Policy {
 	/* serialized */

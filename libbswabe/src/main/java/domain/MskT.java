@@ -4,7 +4,7 @@ import it.unisa.dia.gas.jpbc.Element;
 
 /**
   A master secret key.
- @see bswabe_msk_s
+ @see 'bswabe_msk_s'
 */
 public class MskT {
     private Element beta;        /* Z_r */

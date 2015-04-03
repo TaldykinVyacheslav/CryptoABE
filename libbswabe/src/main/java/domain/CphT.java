@@ -8,7 +8,7 @@ import it.unisa.dia.gas.jpbc.Element;
   you will have to use that group element as a symmetric key for
   hybrid encryption (which you do yourself).
 
- @see bswabe_cph_s
+ @see 'bswabe_cph_s'
 */
 public class CphT {
 	private Element cs;		/* G_T */

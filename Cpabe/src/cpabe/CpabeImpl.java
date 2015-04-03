@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main class, providing Cpabe functional
+ */
 class CpabeImpl implements Cpabe {
     private final Core core = new CoreImpl();
     private Misc misc = new MiscImpl();

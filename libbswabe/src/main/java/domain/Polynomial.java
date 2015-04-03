@@ -4,7 +4,7 @@ package domain;
 import it.unisa.dia.gas.jpbc.Element;
 
 /**
- * @see bswabe_polynomial_t
+ * @see 'bswabe_polynomial_t'
  */
 public class Polynomial {
 	private int deg;

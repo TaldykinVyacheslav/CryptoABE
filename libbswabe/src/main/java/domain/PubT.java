@@ -4,9 +4,9 @@ import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
 
 /**
-  A public key.
- @see bswabe_pub_s
-*/
+ * A public key.
+ * @see 'bswabe_pub_s'
+ */
 public class PubT {
     private String pairingDesc;
     private Pairing p;
