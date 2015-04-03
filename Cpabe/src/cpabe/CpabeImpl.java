@@ -11,6 +11,7 @@ import logic.Misc;
 import logic.MiscImpl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 class CpabeImpl implements Cpabe {
@@ -61,16 +62,34 @@ class CpabeImpl implements Cpabe {
         aes_buf = common.aes_128_cbc_encrypt(plt, m);
 
         common.write_cpabe_file(out_file, cph_buf, file_len, aes_buf);
-
-        g_byte_array_free(cph_buf, 1);
-        g_byte_array_free(aes_buf, 1);
-
-        if( keep == 0 )
-            unlink(in_file);
     }
 
     @Override
-    public void decrypt(String pub_file, String prv_file, String in_file, String out_file) {
+    public void decrypt(String pub_file, String prv_file, String in_file, String out_file) throws Exception {
+        PubT pub;
+        PrvT prv;
+        int file_len = 0;
+        List<Byte> aes_buf = new ArrayList<>();
+        List<Byte> plt = new ArrayList<>();
+        List<Byte> cph_buf = new ArrayList<>();
+        CphT cph;
+        Element m = null;
 
+        pub = misc.pub_unserialize(common.suck_file(pub_file), 1);
+        prv = misc.prv_unserialize(pub, common.suck_file(prv_file), 1);
+
+        common.read_cpabe_file(in_file, cph_buf, file_len, aes_buf);
+
+        cph = misc.cph_unserialize(pub, cph_buf, 1);
+        if( core.dec(pub, prv, cph) == null)
+            return;
+
+        plt = common.aes_128_cbc_decrypt(aes_buf, m);
+
+        common.spit_file(out_file, plt, 1);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Compiled");
     }
 }

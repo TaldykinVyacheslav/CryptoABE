@@ -7,7 +7,7 @@ public interface Cpabe {
 
     void keygen(String pub_file, String msk_file, String out_file, String[] attrs) throws IOException;
 
-    void encrypt(String pub_file, String in_file, String out_file) throws IOException;
+    void encrypt(String pub_file, String in_file, String out_file, String policy) throws Exception;
 
-    void decrypt(String pub_file, String prv_file, String in_file, String out_file);
+    void decrypt(String pub_file, String prv_file, String in_file, String out_file) throws Exception;
 }

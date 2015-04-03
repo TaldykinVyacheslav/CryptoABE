@@ -151,10 +151,14 @@ class CommonImpl {
             b.clear();
     }
 
-    Object[] read_cpabe_file( String fileName, byte[] cph_buf, long file_len, byte[] aes_buf ) throws IOException {
+    Object[] read_cpabe_file( String fileName, List<Byte> cph_buf_list, long file_len, List<Byte> aes_buf_list ) throws IOException {
         FileInputStream f;
         int i;
         int len;
+        byte[] cph_buf, aes_buf;
+
+        cph_buf = fromListToPrimitiveArray(cph_buf_list);
+        aes_buf = fromListToPrimitiveArray(aes_buf_list);
 
         f = fopen_read_or_die(fileName);
 
@@ -182,10 +186,14 @@ class CommonImpl {
         return new Object[] {cph_buf, file_len, aes_buf};
     }
 
-    void write_cpabe_file( String fileName, byte[] cph_buf, long file_len, byte[] aes_buf ) throws IOException {
+    void write_cpabe_file( String fileName, List<Byte> cph_buf_list, long file_len, List<Byte> aes_buf_list ) throws IOException {
         FileOutputStream f;
         DataOutputStream dos;
+        byte[] cph_buf, aes_buf;
         int i;
+
+        cph_buf = fromListToPrimitiveArray(cph_buf_list);
+        aes_buf = fromListToPrimitiveArray(aes_buf_list);
 
         f = fopen_write_or_die(fileName);
         dos = new DataOutputStream(f);
